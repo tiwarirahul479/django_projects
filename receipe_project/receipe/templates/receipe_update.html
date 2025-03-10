@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block start %}
+
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <h2 class="col-6">Update Receipes</h2>
+    <form class="col-6 my-3 card p-3 shadow-lg" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+        <label for="receipe_name" class="form-label">Receipe Name</label>
+        <input type="text" required class="form-control" value="{{recepie_update.receipe_name}}" name="receipe_name" id="receipe_name" aria-describedby="receipe_help">
+        <div id="receipe_help" class="form-text">Tell us about your best receipes.</div>
+        </div>
+        <div class="mb-3">
+            <label for="receipe_description" class="form-label">Description</label>
+            <textarea id="receipe_description" required class="form-control" name="receipe_description" rows="4" cols="50">{{recepie_update.receipe_description}}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="receipe_image" class="form-label">Receipe Image</label>
+            <input type="file" class="form-control" name="receipe_image">
+        </div>
+        <button type="submit" class="btn btn-success">Update Now</button>
+        <p class="text-center my-2">or</p>
+        <a class="text-center" href="/"><i class="fas fa-arrow-left"></i> Go back to recepies list</a>
+    </form>
+</div>
+
+{% endblock %}

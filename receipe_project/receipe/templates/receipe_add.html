@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block start %}
+
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <!-- {% if is_success %}
+    <div class="alert alert-success w-100 alert-dismissible fade show" role="alert">
+        The receipe has success added to the list. <a href="/" class="alert-link">Click here</a> to check the list.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %} -->
+    <h2 class="col-6">Welcome to Receipes</h2>
+    <form class="col-6 my-3 card p-3 shadow-lg" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+        <label for="receipe_name" class="form-label">Receipe Name</label>
+        <input type="text" required class="form-control" name="receipe_name" id="receipe_name" aria-describedby="receipe_help">
+        <div id="receipe_help" class="form-text">Tell us about your best receipes.</div>
+        </div>
+        <div class="mb-3">
+            <label for="receipe_description" class="form-label">Description</label>
+            <textarea id="receipe_description" required class="form-control" name="receipe_description" rows="4" cols="50"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="receipe_image" class="form-label">Receipe Image</label>
+            <input type="file" class="form-control" name="receipe_image">
+        </div>
+        <button type="submit" class="btn btn-success">Add</button>
+    </form>
+</div>
+
+{% endblock %}

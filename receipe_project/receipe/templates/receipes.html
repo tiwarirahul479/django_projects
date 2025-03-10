@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block start %}
+
+    <div>
+        <h2 class="my-3">Listed Receipes</h2>
+        <form class="d-flex my-2">
+          <input class="form-control me-2" type="search" name="search_rec" placeholder="Search Recepies..." aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        {% if receipe_data %}
+        <table class="table table-striped receipe_table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Image</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r_data in receipe_data %}
+              <tr class="receipe_data_row">
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{r_data.receipe_name}}</td>
+                <td>{{r_data.receipe_description}}</td>
+                <td><img src="/media/{{r_data.receipe_image}}" alt="Not Found" width="64" height="64"></td>
+                <td>
+                  <a href="receipe/{{r_data.id}}/" class="btn btn-success">Open</a>
+                  <a href="receipe-update/{{r_data.id}}/" class="btn btn-secondary">Update</a>
+                  <a href="receipe-delete/{{r_data.id}}/" class="btn btn-danger">Delete</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="alert alert-info" role="alert">
+            Sorry, no receipes found!
+          </div>
+          {% endif %}
+    </div>
+
+{% endblock %}
