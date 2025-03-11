@@ -1,19 +1,22 @@
 from django.shortcuts import render, redirect
 from .models import *
+from django.contrib.auth.models import User
+from django.contrib import messages
 
 # Create your views here.
 
 def receipes(request):
     receipe_data = Receipe.objects.all()
+    search_rec = ''
 
     if request.GET.get("search_rec"):
         search_rec = request.GET.get("search_rec")
-        print(f"=====search_rec======={search_rec}")
         receipe_data = receipe_data.filter(receipe_name__icontains = search_rec)
 
     context = {
         'page': 'Receipes Home',
         'receipe_data': receipe_data[::-1],
+        'search_rec': search_rec,
     }
     return render(request, 'receipes.html', context=context)
 
@@ -33,6 +36,8 @@ def receipe_add(request):
             receipe_description = receipe_description,
             receipe_image = receipe_image
         )
+
+        messages.success(request, "Receipe Added successfully!")
 
         return redirect('/receipes/add/')
     
@@ -71,3 +76,41 @@ def receipe_open(request, id):
     }
 
     return render(request, 'receipe_open_page.html', context=context)
+
+def login_page(request):
+    context = {
+        'page': "Login"
+    }
+    return render(request, 'login.html', context=context)
+
+def register_page(request):
+    context = {
+        'page': "Register"
+    }
+
+
+    if request.method == 'POST':
+        data = request.POST
+
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        username = data.get('username')
+        password = data.get('password')
+
+        user = User.objects.filter(username=username)
+        if user.exists():
+            messages.error(request, "Username already exist!")
+            return redirect("/register")
+        
+        user = User.objects.create(
+            first_name = first_name,
+            last_name = last_name,
+            username = username
+        )
+        user.set_password(password)
+        user.save()
+        messages.success(request, "User register successfully!")
+
+        return redirect("/register")
+
+    return render(request, 'register.html', context=context)

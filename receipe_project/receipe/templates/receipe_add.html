@@ -11,6 +11,16 @@
     <h2 class="col-6">Welcome to Receipes</h2>
     <form class="col-6 my-3 card p-3 shadow-lg" method="post" enctype="multipart/form-data">
         {% csrf_token %}
+
+        {% if messages %}
+        {{messages.tags}}
+        <div class="alert alert-success" role="alert">
+            {% for message in messages %}
+            {{message}}
+            {% endfor %}
+        </div>
+        {% endif %}
+
         <div class="mb-3">
         <label for="receipe_name" class="form-label">Receipe Name</label>
         <input type="text" required class="form-control" name="receipe_name" id="receipe_name" aria-describedby="receipe_help">

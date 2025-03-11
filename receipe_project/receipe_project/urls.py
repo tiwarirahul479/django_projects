@@ -28,6 +28,8 @@ urlpatterns = [
     path('receipe-update/<id>/', receipe_update, name='receipe_update'),
     path('receipe/<id>/', receipe_open, name='receipe_open'),
     path('receipes/add/', receipe_add, name='receipe_add'),
+    path('login/', login_page, name='login_page'),
+    path('register/', register_page, name='register_page'),
 ]
 
 if settings.DEBUG:
