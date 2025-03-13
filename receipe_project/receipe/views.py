@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -20,6 +22,7 @@ def receipes(request):
     }
     return render(request, 'receipes.html', context=context)
 
+@login_required(login_url="/login")
 def receipe_add(request):
     context = {
         'page': 'Add Receipes',
@@ -43,12 +46,14 @@ def receipe_add(request):
     
     return render(request, 'receipe_add.html', context=context)
 
+@login_required(login_url="/login")
 def receipe_delete(request, id):
     queryset = Receipe.objects.get(id = id)
     queryset.delete()
 
     return redirect("/")
 
+@login_required(login_url="/login")
 def receipe_update(request, id):
     queryset = Receipe.objects.get(id = id)
     if request.method == 'POST':
@@ -81,13 +86,39 @@ def login_page(request):
     context = {
         'page': "Login"
     }
+
+    if request.method == 'POST':
+        data = request.POST
+
+        username = data.get('username')
+        password = data.get('password')
+
+        user = User.objects.filter(username=username)
+        if not user.exists():
+            messages.error(request, "Username doesn't exist!")
+            return redirect("/login")
+        
+        user = authenticate(username=username, password=password)
+        if user is None:
+            messages.error(request, "Invalid password!")
+            return redirect("/login")
+        else:
+            login(request, user=user)
+            redirect_url = "/"
+            if request.GET.get("next"):
+                redirect_url = request.GET.get("next")
+            return redirect(redirect_url)
+
     return render(request, 'login.html', context=context)
+
+def logout_page(request):
+    logout(request)
+    return redirect("/login")
 
 def register_page(request):
     context = {
         'page': "Register"
     }
-
 
     if request.method == 'POST':
         data = request.POST
@@ -109,8 +140,9 @@ def register_page(request):
         )
         user.set_password(password)
         user.save()
+        login(request, user=user)
         messages.success(request, "User register successfully!")
 
-        return redirect("/register")
+        return redirect("/")
 
     return render(request, 'register.html', context=context)
