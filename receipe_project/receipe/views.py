@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -15,9 +16,15 @@ def receipes(request):
         search_rec = request.GET.get("search_rec")
         receipe_data = receipe_data.filter(receipe_name__icontains = search_rec)
 
+    receipe_data = receipe_data[::-1]
+
+    paginator = Paginator(receipe_data, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'page': 'Receipes Home',
-        'receipe_data': receipe_data[::-1],
+        'receipe_data': page_obj,
         'search_rec': search_rec,
     }
     return render(request, 'receipes.html', context=context)
