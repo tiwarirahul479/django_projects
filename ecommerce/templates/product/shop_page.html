@@ -1,0 +1,44 @@
+{% extends "base/base.html" %}
+{% block start %}
+
+<div class="product_card_main">
+    {% if products %}
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for product in products %}
+            <div class="col">
+            <div class="card h-100" style="border-radius: 15px;">
+                <img src="/media/{{product.product_image}}" class="card-img-top p-3 border-rounded" alt="not found" width="150" height="230" style="border-radius: 28px;">
+                <div class="card-body pt-0">
+                    <hr class="mt-0">
+                    <h6 class="card-title">{{product.product_name}}</h6>
+                    <p class="text-muted">{{product.price}}</p>
+                </div>
+            </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="pagination justify-content-center mt-4">
+        <span class="step-links">
+            {% if products.has_previous %}
+              <a href="?page=1">&laquo; first</a>
+              <a href="?page={{ products.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+              Page {{ products.number }} of {{ products.paginator.num_pages }}.
+            </span>
+    
+            {% if products.has_next %}
+              <a href="?page={{ products.next_page_number }}">next</a>
+              <a href="?page={{ products.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+      </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Sorry, product not found for this website!
+      </div>
+    {% endif %}
+</div>
+
+{% endblock %}
