@@ -1,0 +1,30 @@
+{% extends "base/base.html" %}
+{% block start %}
+
+<div class="product-page">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/shop">Shop</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{product.product_name}}</li>
+        </ol>
+    </nav>
+    
+    <div class="product-details d-flex">
+        <div class="col-4">
+            <img src="/media/{{product.product_image}}" alt="Not Found" width="300" height="300">
+        </div>
+        <div class="col-9">
+            <p><h2>{{product.product_name}}</h2></p>
+            <p class="text-muted">&#8377; {{product.price}}</p>
+            <p>{{product.category.category_name}}</p>
+            <button class="btn btn-secondary">Add to cart</button>
+        </div>
+    </div>
+
+    <div class="product-details-additional mt-4">
+        <p>{{product.product_description}}</p>
+        <p>{{product.product_description}}</p>
+    </div>
+</div>
+
+{% endblock %}

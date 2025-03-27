@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', ecommerce_home, name="ecommerce_home"),
     path('shop/', shop_page, name="shop_page"),
+    path('shop/<uid>', product_page, name="product_page"),
 ]
 
 if settings.DEBUG:

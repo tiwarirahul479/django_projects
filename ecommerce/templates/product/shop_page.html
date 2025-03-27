@@ -2,16 +2,22 @@
 {% block start %}
 
 <div class="product_card_main">
+    <form class="d-flex my-3">
+      <input class="form-control me-2" type="search" name="search_products" autocomplete="off" value="{{search_products}}" placeholder="Search Products..." aria-label="Search">
+      <button class="btn btn-outline-secondary" type="submit">Search</button>
+    </form>
     {% if products %}
     <div class="row row-cols-1 row-cols-md-4 g-4">
         {% for product in products %}
             <div class="col">
             <div class="card h-100" style="border-radius: 15px;">
+              <a href="/shop/{{product.uid}}">
                 <img src="/media/{{product.product_image}}" class="card-img-top p-3 border-rounded" alt="not found" width="150" height="230" style="border-radius: 28px;">
+              </a>
                 <div class="card-body pt-0">
                     <hr class="mt-0">
-                    <h6 class="card-title">{{product.product_name}}</h6>
-                    <p class="text-muted">{{product.price}}</p>
+                    <h6 class="card-title"><a href="/shop/{{product.uid}}">{{product.product_name}}</a></h6>
+                    <p class="text-muted">&#8377; {{product.price}}</p>
                 </div>
             </div>
             </div>
@@ -36,7 +42,7 @@
       </div>
     {% else %}
     <div class="alert alert-info" role="alert">
-        Sorry, product not found for this website!
+        Sorry, no product found!
       </div>
     {% endif %}
 </div>
