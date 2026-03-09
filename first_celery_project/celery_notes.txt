@@ -1,0 +1,43 @@
+Celery Notes
+
+Celery = A python library responsible for achieving asynchronous processing of task in background. Use message brokers. Anything which is taking much time, we can make it run asynchronously in background, for smoother UX. Simply add the task inside the broker, then celery workers will take those and work them concurrently. For windows, it working synchronously because of solo worker due to its compatibility. 
+
+Celery Steps:-
+a. Install celery using pip3 install command
+b. Add the celery related configuration inside settings.py. init.py
+c. Create celery.py name file, do some configuration inside it
+d. For making tasks, create a separate file named as tasks.py inside app
+
+Integration of celery:-
+a. Create the task which you wanted to run into the background, decorate it with @app.task, here app is celery instance
+b. Enqueue the task into messgae broker, use redis. task.delay(pass_func_args) or task.apply_async(args, kwargs)
+c. Celery will return the task id and begans the asynchronus processing of the tasks
+d. To check the celery logs, open celery inside separate terminal by running
+   celery -A your_project_name worker -l info
+e. To get the result from celery, add CELERY_RESULT_BACKEND key in settings.py. Then on admin panel, a separate celery tasks get generated.
+f. Use AsyncResult(<task_id>), to get the result from the celery workers
+g. The above function return:- task_id, state, status, result (value)
+h. Some built-in methods also there as:- result.ready(), result.successful(), result.failed()
+
+Tasks created using separate files as:-
+a. Create tasks.py
+b. Import @shared_task from celery
+c. Make the function, by decorating it with shared tasks
+d. Use these tasks for the further processing
+
+celery-beat:- Use to perform the schedule task on the specific time
+a. Install using pip command, pip install django_celery_results
+b. Make a task to perform in a certain interval of time
+c. inside celery.py, 
+   app.conf.beat_schedule = {
+        'every-10-seconds': {
+            'task': 'myapp.tasks.clear_session_cache',
+            # 'schedule': timedelta(seconds=10),   # executed in every 10sec
+            'schedule': crontab(minute='*/1'),   # executed in every 10sec, for more advance options
+            'args': ('1111', )   # clear_session_cache function arguments
+        }
+
+        # add more periodic tasks from here
+    }
+d. Command to run in a new server is,
+   celery -A your_project_name beat -l info
